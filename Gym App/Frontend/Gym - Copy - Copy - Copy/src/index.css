@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Define CSS custom properties for theming */
+  :root {
+    --theme-bg-950: #020617;
+    --theme-bg-900: #0f172a;
+    --theme-bg-800: #1e293b;
+    --theme-bg-700: #334155;
+    --theme-text-primary: #f1f5f9;
+    --theme-text-secondary: #cbd5e1;
+  }
+
+  /* html/body: no scroll — details in unlayered block below */
+  html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* Match app surfaces (slate-900) so no darker strip vs #root */
+    background-color: #0f172a;
+    color: #f1f5f9;
+  }
+
+  body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #0f172a;
+    color: #f1f5f9;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* Dark (only theme) */
+  html,
+  html.dark {
+    color-scheme: dark;
+  }
+
+  /* Keep input background consistent (override browser autofill) - Dark mode */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0f172a inset !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
+    caret-color: #f1f5f9;
+  }
+
+  /* Ensure all form inputs use same dark background */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="number"] {
+    background-color: #0f172a;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2), 0 0 40px rgba(34, 197, 94, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.05);
+  }
+
+  .glow-primary:hover {
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.3), 0 0 60px rgba(34, 197, 94, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
+  }
+
+  button, a, [role="button"] {
+    @apply transition-all duration-100;
+  }
+}
+
+/*
+ * ONE SCROLLBAR ONLY:
+ * - html and body never scroll (overflow: hidden).
+ * - Only #root scrolls. Nothing else gets overflow-y: auto on the full page.
+ * - Scrollbar styling is only on #root; track is transparent so you don’t see “two” rails (track + thumb).
+ */
+html {
+  height: 100%;
+  overflow: hidden !important;
+}
+
+body {
+  height: 100%;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+#root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  /* Same as page bg — avoids a darker band when content doesn’t fully paint */
+  background-color: #0f172a;
+  overflow-x: clip;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  /* Thin, neutral thumb — avoids a “neon green border” full-height on the right */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+
+/* WebKit — subtle thumb; not a solid green rail along the whole viewport */
+#root::-webkit-scrollbar {
+  width: 6px;
+}
+
+#root::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#root::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 9999px;
+}
+
+#root::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+}

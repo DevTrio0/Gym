@@ -1,0 +1,549 @@
+// Gym & Online Coaching API - Complete Test Examples
+// Use with Postman, Thunder Client, or REST Client extension
+// Replace tokens and IDs as needed
+
+@baseUrl = http://localhost:5000
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyXzEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDc0MTA4MDB9.xxx
+@coachToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjb2FjaF8xIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzA3NDEwODAwfQ.xxx
+@clientToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGllbnRfMSIsInJvbGUiOiJjbGllbnQiLCJpYXQiOjE3MDc0MTA4MDB9.xxx
+
+// ============================================================================
+// SHARED ENDPOINTS (No Authentication Required)
+// ============================================================================
+
+### Load Coach Frontend
+GET {{baseUrl}}/coach/start
+
+### Load Admin Frontend
+GET {{baseUrl}}/admin/start
+
+### Load Client Frontend
+GET {{baseUrl}}/client/start
+
+// ============================================================================
+// COACH AUTHENTICATION ENDPOINTS
+// ============================================================================
+
+### Coach - Login Check (Account Exists)
+POST {{baseUrl}}/coach/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@coach.com"
+}
+
+### Coach - Sign In
+POST {{baseUrl}}/coach/auth/signin
+Content-Type: application/json
+
+{
+  "email": "john@coach.com",
+  "password": "admin123"
+}
+
+### Coach - Forgot Password
+POST {{baseUrl}}/coach/auth/forgetpassword
+Content-Type: application/json
+
+{
+  "email": "john@coach.com"
+}
+
+### Coach - Reset Password
+POST {{baseUrl}}/coach/auth/resetpassword
+Content-Type: application/json
+
+{
+  "email": "john@coach.com",
+  "newPassword": "newPassword123",
+  "token": "reset_1770698513498_0.11258575973923501"
+}
+
+// ============================================================================
+// COACH DASHBOARD ENDPOINTS (Require Auth)
+// ============================================================================
+
+### Coach - Get Dashboard
+GET {{baseUrl}}/coach/dashboard
+Authorization: Bearer {{coachToken}}
+
+### Coach - Get All Clients
+GET {{baseUrl}}/coach/dashboard/clients
+Authorization: Bearer {{coachToken}}
+
+### Coach - Add Diet Plan for Client
+POST {{baseUrl}}/coach/dashboard/add-diet
+Authorization: Bearer {{coachToken}}
+Content-Type: application/json
+
+{
+  "clientId": "client_1",
+  "dietPlan": {
+    "breakfast": "500 cal - Oats with eggs and berries",
+    "lunch": "700 cal - Grilled chicken breast with brown rice and broccoli",
+    "dinner": "500 cal - Salmon with sweet potato and asparagus",
+    "snacks": "300 cal - Protein shake or Greek yogurt"
+  }
+}
+
+### Coach - Add Weekly Training Plan
+POST {{baseUrl}}/coach/dashboard/add-training
+Authorization: Bearer {{coachToken}}
+Content-Type: application/json
+
+{
+  "clientId": "client_1",
+  "week": 1,
+  "trainingPlan": {
+    "monday": "Chest & Triceps - 45 min - Bench Press, Incline Dumbbell Press, Tricep Dips",
+    "tuesday": "Back & Biceps - 45 min - Deadlifts, Pull-ups, Barbell Rows",
+    "wednesday": "Rest day - Light stretching and mobility work",
+    "thursday": "Legs & Core - 50 min - Squats, Leg Press, Core exercises",
+    "friday": "Shoulders & Arms - 45 min - Shoulder Press, Lateral Raises",
+    "saturday": "Full Body Circuit - 60 min - Mix of cardio and strength",
+    "sunday": "Rest day - Recovery"
+  }
+}
+
+### Coach - Add Note for Client
+POST {{baseUrl}}/coach/dashboard/clients/client_1/add-note
+Authorization: Bearer {{coachToken}}
+Content-Type: application/json
+
+{
+  "note": "Jane is showing excellent progress with deadlifts. Increased weight by 10kg. Continue with current routine and focus on form."
+}
+
+### Coach - Get Client Progress
+GET {{baseUrl}}/coach/dashboard/clients/client_1/progress
+Authorization: Bearer {{coachToken}}
+
+### Coach - Logout
+POST {{baseUrl}}/coach/exit
+Authorization: Bearer {{coachToken}}
+Content-Type: application/json
+
+{
+  "userId": "coach_1"
+}
+
+// ============================================================================
+// ADMIN AUTHENTICATION ENDPOINTS
+// ============================================================================
+
+### Admin - Sign In
+POST {{baseUrl}}/admin/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "admin123"
+}
+
+### Admin - Forgot Password
+POST {{baseUrl}}/admin/auth/forgetpassword
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com"
+}
+
+### Admin - Reset Password
+POST {{baseUrl}}/admin/auth/resetpassword
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "newPassword": "newAdminPassword123",
+  "token": "reset_1707410800000_0.5432"
+}
+
+### Admin - Register New Admin
+POST {{baseUrl}}/admin/auth/register
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "John Admin",
+  "email": "john.admin@gmail.com",
+  "password": "adminPassword123"
+}
+
+// ============================================================================
+// ADMIN DASHBOARD ENDPOINTS (Require Auth)
+// ============================================================================
+
+### Admin - Get Dashboard
+GET {{baseUrl}}/admin/dashboard
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Total Users Stats
+GET {{baseUrl}}/admin/stats/users
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Total Coaches Stats
+GET {{baseUrl}}/admin/stats/coaches
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Total Clients Stats
+GET {{baseUrl}}/admin/stats/clients
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Total Payments Stats
+GET {{baseUrl}}/admin/stats/payments
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Active Coaches Stats
+GET {{baseUrl}}/admin/stats/active-coaches
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Pending Coaches Stats
+GET {{baseUrl}}/admin/stats/pending-coaches
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Active Clients Stats
+GET {{baseUrl}}/admin/stats/active-clients
+Authorization: Bearer {{adminToken}}
+
+### Admin - Add New Coach
+POST {{baseUrl}}/admin/dashboard/add-coach
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Sarah Coach",
+  "email": "sarah@coach.com",
+  "password": "coachPassword123"
+}
+
+### Admin - Add New Client
+POST {{baseUrl}}/admin/dashboard/add-client
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Michael Client",
+  "email": "michael@client.com",
+  "password": "clientPassword123"
+}
+
+### Admin - Delete Account
+DELETE {{baseUrl}}/admin/dashboard/delete-account
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "userId": "user_1707410800000",
+  "role": "client"
+}
+
+### Admin - Deactivate Account
+PUT {{baseUrl}}/admin/dashboard/deactivate-account
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "userId": "user_1707410800000",
+  "role": "client"
+}
+
+### Admin - Reactivate Account
+PUT {{baseUrl}}/admin/dashboard/reactivate-account
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "userId": "user_1707410800000",
+  "role": "client"
+}
+
+### Admin - Approve Coach Subscription
+PUT {{baseUrl}}/admin/dashboard/subscription/approve
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "coachId": "coach_1707410800000"
+}
+
+### Admin - Get Monthly Reports
+GET {{baseUrl}}/admin/dashboard/reports/monthly?month=2&year=2026
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get All Payments
+GET {{baseUrl}}/admin/dashboard/payments
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Profit Report
+GET {{baseUrl}}/admin/dashboard/profits?taxPercentage=20
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Detailed Profit Report
+GET {{baseUrl}}/admin/dashboard/profits/detail?taxPercentage=20
+Authorization: Bearer {{adminToken}}
+
+### Admin - Logout
+POST {{baseUrl}}/admin/exit
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "userId": "user_1"
+}
+
+// ============================================================================
+// COACH SALARY MANAGEMENT (Admin Only)
+// ============================================================================
+
+### Admin - Set Coach Salary
+POST {{baseUrl}}/admin/dashboard/salary/set
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "coachId": "coach_1",
+  "amount": 5000,
+  "description": "Monthly salary for John Coach"
+}
+
+### Admin - Get All Coach Salaries
+GET {{baseUrl}}/admin/dashboard/salary/all
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get Single Coach Salary
+GET {{baseUrl}}/admin/dashboard/salary/coach_1
+Authorization: Bearer {{adminToken}}
+
+### Admin - Pay Coach Salary
+POST {{baseUrl}}/admin/dashboard/salary/pay
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "coachId": "coach_1",
+  "amount": 5000,
+  "notes": "February 2026 salary payment"
+}
+
+### Admin - Get Coach Payment History
+GET {{baseUrl}}/admin/dashboard/salary/history/coach_1?limit=12
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get All Salary Payments
+GET {{baseUrl}}/admin/dashboard/salary-payments/all?limit=20
+Authorization: Bearer {{adminToken}}
+
+### Admin - Generate Salary Report
+GET {{baseUrl}}/admin/dashboard/salary/report
+Authorization: Bearer {{adminToken}}
+
+// ============================================================================
+// CLIENT AUTHENTICATION ENDPOINTS
+// ============================================================================
+
+### Client - Login Check (Account Exists)
+POST {{baseUrl}}/client/auth/login
+Content-Type: application/json
+
+{
+  "email": "jane@client.com"
+}
+
+### Client - Sign In
+POST {{baseUrl}}/client/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jane@client.com",
+  "password": "admin123"
+}
+
+### Client - Register New Account
+POST {{baseUrl}}/client/auth/register
+Content-Type: application/json
+
+{
+  "name": "Lisa Anderson",
+  "email": "lisa@client.com",
+  "password": "clientPassword123"
+}
+
+### Client - Forgot Password
+POST {{baseUrl}}/client/auth/forgetpassword
+Content-Type: application/json
+
+{
+  "email": "jane@client.com"
+}
+
+### Client - Reset Password
+POST {{baseUrl}}/client/auth/resetpassword
+Content-Type: application/json
+
+{
+  "email": "jane@client.com",
+  "newPassword": "newClientPassword123",
+  "token": "reset_1707410800000_0.5432"
+}
+
+// ============================================================================
+// CLIENT DASHBOARD ENDPOINTS (Require Auth)
+// ============================================================================
+
+### Client - Get Dashboard
+GET {{baseUrl}}/client/dashboard
+Authorization: Bearer {{clientToken}}
+
+### Client - Welcome Page
+GET {{baseUrl}}/client/welcome
+Authorization: Bearer {{clientToken}}
+
+### Client - Book Workout
+POST {{baseUrl}}/client/dashboard/book-workout
+Authorization: Bearer {{clientToken}}
+Content-Type: application/json
+
+{
+  "workoutId": "training_1",
+  "agree": true
+}
+
+### Client - Select Subscription Plan
+POST {{baseUrl}}/client/dashboard/subscription/select-plan
+Authorization: Bearer {{clientToken}}
+Content-Type: application/json
+
+{
+  "planId": "plan_1",
+  "method": "gym"
+}
+
+### Client - Make Payment
+POST {{baseUrl}}/client/dashboard/subscription/payment
+Authorization: Bearer {{clientToken}}
+Content-Type: application/json
+
+{
+  "planId": "plan_1",
+  "paymentMethod": "credit_card",
+  "paymentDetails": {
+    "method": "gym",
+    "cardNumber": "4532_xxxx_xxxx_xxxx",
+    "cardholderName": "Jane Client"
+  }
+}
+
+### Client - Renew or Change Subscription
+POST {{baseUrl}}/client/dashboard/subscription/renew-or-change
+Authorization: Bearer {{clientToken}}
+Content-Type: application/json
+
+{
+  "newPlanId": "plan_2"
+}
+
+### Client - Get Weekly Workouts
+GET {{baseUrl}}/client/dashboard/workout-week?weekId=1
+Authorization: Bearer {{clientToken}}
+
+### Client - Get Progress
+GET {{baseUrl}}/client/dashboard/progress
+Authorization: Bearer {{clientToken}}
+
+### Client - Update Progress
+POST {{baseUrl}}/client/dashboard/progress/update
+Authorization: Bearer {{clientToken}}
+Content-Type: application/json
+
+{
+  "dietProgress": "Excellent",
+  "workoutProgress": "85%",
+  "notes": "Feeling stronger, increased bench press weight"
+}
+
+### Client - Logout
+POST {{baseUrl}}/client/exit
+Authorization: Bearer {{clientToken}}
+Content-Type: application/json
+
+{
+  "userId": "client_1"
+}
+
+// ============================================================================
+// SUBSCRIPTION PLANS INFO (Reference Data)
+// ============================================================================
+
+/*
+Available Subscription Plans:
+
+1. Basic Plan (plan_1)
+   - Price: $50/month
+   - Duration: 30 days
+   - Type: gym
+   - Description: Basic gym access
+
+2. Premium Plan (plan_2)
+   - Price: $100/month
+   - Duration: 30 days
+   - Type: online
+   - Description: Online coaching with diet plan
+
+3. Elite Plan (plan_3)
+   - Price: $150/month
+   - Duration: 30 days
+   - Type: hybrid
+   - Description: Gym + Online coaching
+*/
+
+// ============================================================================
+// MOCK DATABASE USERS
+// ============================================================================
+
+/*
+Admin User:
+  ID: user_1
+  Email: admin@gmail.com
+  Password: admin123
+  Role: admin
+
+Coach User:
+  ID: user_coach_1 (maps to Coach ID: coach_1)
+  Email: john@coach.com
+  Password: admin123
+  Role: coach
+  Clients: [client_1]
+
+Client User:
+  ID: user_client_1 (maps to Client ID: client_1)
+  Email: jane@client.com
+  Password: admin123
+  Role: client
+  Coach: coach_1
+  Subscription: Active (plan_1)
+*/
+
+// ============================================================================
+// COMMON RESPONSE PATTERNS
+// ============================================================================
+
+/*
+Success Response Format:
+{
+  "status": "success",
+  "message": "...",
+  "data": {...}
+}
+
+Error Response Format:
+{
+  "status": "error",
+  "message": "Error description"
+}
+
+Authentication Error:
+{
+  "status": "error",
+  "message": "Unauthorized"
+}
+*/
